@@ -6,6 +6,26 @@ Aplicação web em C# com ASP.NET Core MVC, Entity Framework Core e SQL Server. 
 - **Leitores** — consulte, cadastre, edite e exclua leitores sem histórico de empréstimos.
 - **Empréstimos** — registre retiradas e devoluções, filtre os empréstimos em aberto e consulte o histórico.
 
+## Livraria em uso
+
+![Painel com indicadores de livros, leitores e empréstimos ativos](docs/images/painel.png)
+
+### Catálogo
+
+O livro cadastrado aparece no catálogo com o status **Disponível**.
+
+![Catálogo com um livro disponível](docs/images/catalogo.png)
+
+### Retirada e devolução
+
+Após registrar a retirada, o empréstimo aparece no histórico como **Em aberto**.
+
+![Histórico com empréstimo em aberto e opção de registrar devolução](docs/images/emprestimo.png)
+
+Ao registrar a devolução, a data fica no histórico e o livro volta a ficar disponível para outro empréstimo.
+
+![Confirmação de devolução e histórico com a data registrada](docs/images/devolucao.png)
+
 ## Executar no Codespaces
 
 O projeto tem como alvo o .NET 6 e precisa do runtime ASP.NET Core 6. Use um SDK capaz de compilar projetos `net6.0` e um SQL Server de teste. Exemplo para um Codespace com Docker:
