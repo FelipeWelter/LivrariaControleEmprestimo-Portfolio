@@ -1,0 +1,29 @@
+@model LivrariaControleEmprestimo.DATA.Models.Livros
+@{
+    ViewData["Title"] = Model.Id == 0 ? "Cadastrar livro" : "Editar livro";
+}
+<h1 class="mb-4">@ViewData["Title"]</h1>
+<form asp-action="Edit" asp-route-id="@(Model.Id == 0 ? (int?)null : Model.Id)" method="post" class="painel">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <label for="Nome" class="form-label">Título</label>
+            <input asp-for="Nome" class="form-control" maxlength="50" required />
+            <span asp-validation-for="Nome" class="text-danger"></span>
+        </div>
+        <div class="col-md-4">
+            <label asp-for="Autor" class="form-label"></label>
+            <input asp-for="Autor" class="form-control" maxlength="100" required />
+            <span asp-validation-for="Autor" class="text-danger"></span>
+        </div>
+        <div class="col-md-4">
+            <label asp-for="Editora" class="form-label"></label>
+            <input asp-for="Editora" class="form-control" maxlength="50" />
+            <span asp-validation-for="Editora" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="acoes">
+        <button class="btn btn-primary" type="submit">Salvar livro</button>
+        <a asp-action="Index">Voltar ao catálogo</a>
+    </div>
+</form>

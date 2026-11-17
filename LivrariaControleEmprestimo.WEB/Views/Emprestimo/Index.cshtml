@@ -1,0 +1,76 @@
+@using LivrariaControleEmprestimo.DATA.Models
+@model IReadOnlyList<LivroClienteEmprestimo>
+@{
+    ViewData["Title"] = "Empréstimos";
+    var livros = (List<Livros>)ViewBag.Livros;
+    var clientes = (List<Cliente>)ViewBag.Clientes;
+    var ativos = (bool)ViewBag.Ativos;
+}
+<header class="cabecalho"><div><h1>Empréstimos</h1><p>Registre retiradas e acompanhe as devoluções.</p></div></header>
+<section class="painel mb-4">
+    <h2>Novo empréstimo</h2>
+    @if (livros.Count == 0 || clientes.Count == 0)
+    {
+        <p class="mb-0">O registro de empréstimo exige um <a asp-controller="Livro" asp-action="Index">livro disponível</a> e um <a asp-controller="Cliente" asp-action="Index">leitor cadastrado</a>.</p>
+    }
+    else
+    {
+        <form asp-action="Registrar" method="post" class="row g-3 align-items-end">
+            <div class="col-md">
+                <label for="idLivro" class="form-label">Livro disponível</label>
+                <select id="idLivro" name="idLivro" class="form-select" required>
+                    <option value="">Selecione um livro</option>
+                    @foreach (var livro in livros) { <option value="@livro.Id">@livro.Nome · @livro.Autor</option> }
+                </select>
+            </div>
+            <div class="col-md">
+                <label for="idCliente" class="form-label">Leitor</label>
+                <select id="idCliente" name="idCliente" class="form-select" required>
+                    <option value="">Selecione um leitor</option>
+                    @foreach (var cliente in clientes) { <option value="@cliente.Id">@cliente.Nome (#@cliente.Id)</option> }
+                </select>
+            </div>
+            <div class="col-md-auto"><button type="submit" class="btn btn-primary">Registrar empréstimo</button></div>
+        </form>
+    }
+</section>
+<section class="painel">
+    <div class="cabecalho">
+        <h2 class="mb-0">Histórico</h2>
+        <a asp-action="Index" asp-route-ativos="@(!ativos ? "true" : "false")">@(ativos ? "Mostrar todos" : "Mostrar apenas ativos")</a>
+    </div>
+    @if (Model.Count == 0)
+    {
+        <p class="mb-0">Nenhum empréstimo encontrado.</p>
+    }
+    else
+    {
+        <div class="rolagem">
+            <table class="table align-middle mb-0">
+                <thead><tr><th>Livro</th><th>Leitor</th><th>Retirada</th><th>Devolução</th><th>Ações</th></tr></thead>
+                <tbody>
+                @foreach (var registro in Model)
+                {
+                    <tr>
+                        <td><strong>@(registro.IdLivroNavigation?.Nome ?? "—")</strong></td>
+                        <td>@(registro.IdClienteNavigation?.Nome ?? "—")</td>
+                        <td>@(registro.DataEmprestimo?.ToString("dd/MM/yyyy") ?? "—")</td>
+                        <td>
+                            @if (registro.DataDevolucao.HasValue) { @registro.DataDevolucao.Value.ToString("dd/MM/yyyy") }
+                            else { <span class="estado emprestado">Em aberto</span> }
+                        </td>
+                        <td>
+                            @if (registro.DataDevolucao == null)
+                            {
+                                <form asp-action="Devolver" asp-route-id="@registro.Id" asp-route-ativos="@(ativos ? "true" : "false")" method="post">
+                                    <button type="submit" class="btn btn-outline-dark btn-sm">Registrar devolução</button>
+                                </form>
+                            }
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    }
+</section>

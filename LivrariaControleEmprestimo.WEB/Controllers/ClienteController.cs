@@ -1,11 +1,12 @@
 ﻿using LivrariaControleEmprestimo.DATA.Models;
 using LivrariaControleEmprestimo.DATA.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.EntityFrameworkCore;
 
 namespace LivrariaControleEmprestimo.WEB.Controllers
 {
     
+    [AutoValidateAntiforgeryToken]
     public class ClienteController : Controller
     {
         private ClienteService oClienteService = new ClienteService();
@@ -53,10 +54,29 @@ namespace LivrariaControleEmprestimo.WEB.Controllers
             return RedirectToAction("Details", new { id });
         }
 
-        public IActionResult Delete(int id)
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
         {
-            oClienteService.oRepositoryCliente.Excluir(id);
-            return RedirectToAction("Index");
+            await using var db = new ControleEmprestimoLivroContext();
+            var cliente = await db.Cliente.FindAsync(id);
+            if (cliente == null) return NotFound();
+            if (await db.LivroClienteEmprestimo.AnyAsync(e => e.IdCliente == id))
+            {
+                TempData["Aviso"] = "O leitor tem histórico de empréstimos e não pode ser excluído.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            db.Cliente.Remove(cliente);
+            try
+            {
+                await db.SaveChangesAsync();
+                TempData["Mensagem"] = "Leitor excluído.";
+            }
+            catch (DbUpdateException)
+            {
+                TempData["Aviso"] = "Não foi possível excluir o leitor. Confira se existem empréstimos vinculados.";
+            }
+            return RedirectToAction(nameof(Index));
         }
     }
 }

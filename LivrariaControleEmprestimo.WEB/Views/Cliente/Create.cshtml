@@ -1,10 +1,10 @@
 ﻿@model LivrariaControleEmprestimo.DATA.Models.Cliente
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Cadastrar leitor";
 }
 
-<h1>Novo Usuário</h1>
+<h1>Cadastrar leitor</h1>
 
 <h4>Preencha os campos abaixo para efetuar o cadastro</h4>
 <hr />
@@ -14,7 +14,7 @@
 <br/>
 <div class="row">
     <div class="col-md">
-        <form asp-action="Create">
+        <form asp-action="Create" method="post">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
      <div class="card">
         <div class="card-header">Dados Pessoais</div>

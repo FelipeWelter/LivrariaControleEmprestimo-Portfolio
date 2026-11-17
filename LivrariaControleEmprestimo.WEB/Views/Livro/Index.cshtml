@@ -1,0 +1,40 @@
+@model IReadOnlyList<LivrariaControleEmprestimo.DATA.Models.Livros>
+@{
+    ViewData["Title"] = "Catálogo";
+    var emprestados = (HashSet<int>)ViewBag.Emprestados;
+}
+<header class="cabecalho">
+    <div><h1>Catálogo</h1><p>Encontre livros e consulte a disponibilidade.</p></div>
+    <a class="btn btn-primary" asp-action="Edit">Cadastrar livro</a>
+</header>
+<section class="painel">
+    <form method="get" class="acoes mb-3" role="search">
+        <label for="busca">Título ou autor</label>
+        <input class="form-control w-auto" id="busca" name="busca" value="@ViewBag.Busca" />
+        <button class="btn btn-outline-dark" type="submit">Buscar</button>
+        <a asp-action="Index">Limpar busca</a>
+    </form>
+    @if (Model.Count == 0)
+    {
+        <p class="mb-0">Nenhum livro encontrado.</p>
+    }
+    else
+    {
+        <div class="rolagem">
+            <table class="table align-middle mb-0">
+                <thead><tr><th>Título</th><th>Autor</th><th>Editora</th><th>Disponibilidade</th><th>Ações</th></tr></thead>
+                <tbody>
+                @foreach (var livro in Model)
+                {
+                    var ocupado = emprestados.Contains(livro.Id);
+                    <tr>
+                        <td><strong>@livro.Nome</strong></td><td>@livro.Autor</td><td>@(livro.Editora ?? "—")</td>
+                        <td><span class="estado @(ocupado ? "emprestado" : "disponivel")">@(ocupado ? "Emprestado" : "Disponível")</span></td>
+                        <td><a asp-action="Edit" asp-route-id="@livro.Id">Editar</a></td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    }
+</section>

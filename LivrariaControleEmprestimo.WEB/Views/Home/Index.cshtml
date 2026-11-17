@@ -1,8 +1,16 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+@{
+    ViewData["Title"] = "Painel";
 }
-
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<section class="abertura">
+    <h1>Controle de empréstimos</h1>
+    <p class="lead">Consulte o acervo, cadastre leitores e acompanhe a saída e a devolução dos livros.</p>
+    <div class="acoes">
+        <a class="btn btn-light" asp-controller="Emprestimo" asp-action="Index">Gerenciar empréstimos</a>
+        <a class="btn btn-outline-light" asp-controller="Livro" asp-action="Index">Consultar catálogo</a>
+    </div>
+</section>
+<section class="indicadores" aria-label="Resumo do acervo">
+    <div class="painel"><span>Livros no catálogo</span><strong>@ViewBag.Livros</strong></div>
+    <div class="painel"><span>Leitores cadastrados</span><strong>@ViewBag.Clientes</strong></div>
+    <div class="painel"><span>Empréstimos ativos</span><strong>@ViewBag.Ativos</strong></div>
+</section>

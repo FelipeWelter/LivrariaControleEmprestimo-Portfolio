@@ -1,14 +1,14 @@
 ﻿@model IEnumerable<LivrariaControleEmprestimo.DATA.Models.Cliente>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Leitores";
 }
 
-<h1>Clientes</h1>
-
-<p>
-    <a class="btn btn-primary" asp-action="Create">Novo Usuário</a>
-</p>
+<header class="cabecalho">
+    <div><h1>Leitores</h1><p>Consulte os cadastros e mantenha os dados de contato atualizados.</p></div>
+    <a class="btn btn-primary" asp-action="Create">Cadastrar leitor</a>
+</header>
+<div class="painel rolagem">
 <table id="myTable" class="table">
     <thead>
         <tr>
@@ -55,7 +55,7 @@
                     <a asp-action="Details" class="btn alert-primary" asp-route-id="@item.Id">Detalhes</a>
 
                     <!-- Button trigger modal -->
-                    <button type="button" class="bnt alert-danger" data-bs-toggle="modal" data-bs-target="#DeleteModal-@item.Id">
+                    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#DeleteModal-@item.Id">
                         Excluir
                     </button>
 
@@ -72,7 +72,9 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Não</button>
-                                    <a asp-action="Delete" class="btn btn-danger" asp-route-id="@item.Id">Sim</a>
+                                    <form asp-action="Delete" asp-route-id="@item.Id" method="post">
+                                        <button class="btn btn-danger" type="submit">Excluir leitor</button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -83,6 +85,7 @@
 }
     </tbody>
 </table>
+</div>
 
             @section Scripts {
                 <script>
